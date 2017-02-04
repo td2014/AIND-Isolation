@@ -140,10 +140,11 @@ class CustomPlayer:
             # when the timer gets close to expiring
  
             if self.method=="minimax":
- 
+                # set initialization from the point of view of maximizing player 
                 opt_score_result = float("-inf")
                 opt_move = (-1,-1)
-                
+
+                # if iterative, initialize depth counter to 1                 
                 if self.iterative:
                     depth=1
                 else:
@@ -154,7 +155,8 @@ class CustomPlayer:
                     if score_result > opt_score_result:
                         opt_score_result = score_result
                         opt_move = test_move
-                        
+                    
+                    # iterate until we hit timeout or break after fixed depth.
                     if self.iterative:
                         depth=depth+1
                     else:
@@ -165,6 +167,7 @@ class CustomPlayer:
                 opt_score_result = float("-inf")
                 opt_move = (-1,-1)
                 
+                # if iterative, initialize depth counter to 1 
                 if self.iterative:
                     depth=1
                 else:
@@ -175,7 +178,8 @@ class CustomPlayer:
                     if score_result > opt_score_result:
                         opt_score_result = score_result
                         opt_move = test_move
-                        
+                    
+                    # iterate until we hit timeout or break after fixed depth.
                     if self.iterative:
                         depth=depth+1
                     else:
@@ -215,21 +219,12 @@ class CustomPlayer:
         """
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
-
-        # TODO: finish this function!
-        
-###        print("-----")
-###        print("minimax: top")
-###        print("minimax: depth = ", depth)
-###        print("minimax: maximizing_player = ", maximizing_player)
-###        print("minimax: starting positions:")
-###        print(game.print_board())
-        
+       
         # using depth to determine level to evaluate
         # score.  When depth==1 then stop recursing.
-            
+        
+        # if no legal moves, return with defaults.
         if len(game.get_legal_moves()) == 0:
-###            print("minimax: no legal moves remain")
             if maximizing_player:
                 return float("-inf"), (-1,-1)
             else:
@@ -237,11 +232,9 @@ class CustomPlayer:
         else:
         # initialize return scores and moves
             if maximizing_player:
-###                print("minimax: initializing maximizing player")
                 opt_score_result = float("-inf")
                 opt_move = (-1,-1)
             else:
-###                print("minimax: initializing minimizing player")
                 opt_score_result = float("inf")
                 opt_move = (-1,-1)  
                 
@@ -249,31 +242,22 @@ class CustomPlayer:
         # now loop over legal moves and determine max or min scoring move
         # depending on layer type.        
             if depth == 1:
-###                print("minimax: at target depth")
-###                print("minimax: at target depth - maximizing_player = ", maximizing_player)
-###                print("minimax: at target depth - legal_moves = ", game.get_legal_moves())
+                # Loop over legal moves
                 for iMove in game.get_legal_moves():
-###                    print("minimax: at target depth ---start of iMove---")
                     gameTemp= game.forecast_move(iMove)
-###                    print("minimax: at target depth, checking iMove = ", iMove)
-###                    print(gameTemp.print_board())
                     score_result = self.score(gameTemp, self)
-###                    print("minimax: at target depth - score_result = ", score_result)
                     if maximizing_player:
-###                        print("minimax: at target depth - maximizing player")
                         if score_result > opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
                         else:
                             continue
-                    else:
-###                        print("minimax: at target depth - minimizing player")
+                    else: # minimizing player process
                         if score_result < opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
                         else:
                             continue
-###                print("minimax: at target depth ---end of iMoves---")
                 return opt_score_result, opt_move
             else:
                 # recurse to the next level down
@@ -282,20 +266,15 @@ class CustomPlayer:
                     # update game board with parent move before recursing.
                     gameTemp = game.forecast_move(iMove)
                     # recursive call:  decrease depth and invert maximize to toggle between min/max layers
-###                    print("======")
-###                    print("minimax: calling recursion: maximizing_player, iMove = ", maximizing_player, iMove)
                     score_result, test_move = self.minimax(gameTemp, depth-1, not maximizing_player)
-###                    print("minimax: recursion return - depth, score_result, iMove, test_move", depth, score_result, iMove, test_move)
                     # want to update max or min depending if current layer is maximizing or minimizing
                     if maximizing_player:
-###                        print("minimax: recursion return - maximizing player")
                         if score_result > opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
                         else:
                             continue
-                    else:
-###                        print("minimax: recursion return - minimizing player")
+                    else:  # minimizing player processing
                         if score_result < opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
