@@ -7,7 +7,8 @@ You must test your agent's strength against a set of agents with known
 relative strength using tournament.py and include the results in your report.
 """
 import random
-import sample_players as sp #for testing
+###import sample_players as sp #for testing
+import math
 
 
 class Timeout(Exception):
@@ -35,16 +36,53 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    return sp.open_move_score(game, player)
-    
     # TODO: finish this function!
     
     # heuristic ideas:
         
-    # 1)  Average reciprocal distance of open squares from center: OSD
-    # 2)  Ratio of central open squares to central peripheral squares
-    # 3)  Opponent position furthest from center of board.
+    # 1)  Centrality Ratio:
 
+#    print("Positions:")
+    myLocation = game.get_player_location(player)
+    oppLocation = game.get_player_location(game.get_opponent(player))
+#    print("Me: ", myLocation)
+#    print("Opponent: ", oppLocation)
+    rowCenter = game.height//2
+    colCenter = game.width//2
+#    print("RowCenter, ColCenter = ", rowCenter, colCenter)
+#    print("myLocation[0] = ", myLocation[0])
+#    print("myLocation[1] = ", myLocation[1])
+#    print("oppLocation[0] = ", oppLocation[0])
+#    print("oppLocation[1] = ", oppLocation[1])
+    
+    myDistToCenter=(myLocation[0]-rowCenter)**2 + (myLocation[1]-colCenter)**2
+    myDistToCenter=math.sqrt(myDistToCenter) 
+
+    oppDistToCenter=(oppLocation[0]-rowCenter)**2 + (oppLocation[1]-colCenter)**2
+    oppDistToCenter=math.sqrt(oppDistToCenter)        
+           
+#    print("myDistToCenter = ", myDistToCenter)
+#    print("oppDistToCenter = ", oppDistToCenter)
+    
+    myDistToCenter = max(1.0, myDistToCenter)
+    oppDistToCenter = max(1.0, oppDistToCenter)
+    
+    score = oppDistToCenter/myDistToCenter
+#    print("score = ", score)
+    
+#    print(game.to_string())
+
+#    input("press key to continue.")
+    
+
+    
+    # 2)  Average reciprocal distance of open squares from center: OSD:
+            
+                      
+            
+    # 3)  Ratio of central open squares to central peripheral squares
+
+    return score
 
 class CustomPlayer:
     """Game-playing agent that chooses a move using your evaluation function
