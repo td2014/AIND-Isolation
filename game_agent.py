@@ -456,12 +456,17 @@ class CustomPlayer:
                         print("alphabeta: recursion return - maximizing player, game.move_count = ", game.counts)
                         print("alphabeta: recursion return - maximizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - maximizing player, score_result, alpha = ", score_result, alpha)
-                        if score_result > alpha:
+                        if score_result > beta:
+                            print("alphabeta: recursion return - beta limit hit")
+                            opt_score_result = score_result
+                            opt_move = iMove
+                            break
+                        elif score_result > alpha:
                             alpha=score_result
                             print("alphabeta: recursion return, setting alpha = ", alpha)
                             opt_score_result = score_result
                             opt_move = iMove
-##                               break
+##                            break
                         elif score_result > opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
@@ -471,7 +476,12 @@ class CustomPlayer:
                         print("alphabeta: recursion return - minimizing player, game.move_count = ", game.counts)
                         print("alphabeta: recursion return - minimizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - minimizing player, score_result, beta = ", score_result, beta)
-                        if score_result < beta:
+                        if score_result < alpha:
+                            print("alphabeta: recursion return - alpha limit hit")
+                            opt_score_result = score_result
+                            opt_move = iMove
+                            break
+                        elif score_result < beta:
                             beta=score_result
                             print("alphabeta: recursion return, setting beta = ", beta)
                             opt_score_result = score_result
