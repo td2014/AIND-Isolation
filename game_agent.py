@@ -410,10 +410,11 @@ class CustomPlayer:
                     if maximizing_player:
                         print("alphabeta: at target depth - maximizing player")
                         if score_result >= beta:
-                                print("alphabeta: beta pruning triggered, move_count=", game.counts)
+                                print("alphabeta: beta pruning triggered, move_count +++ =", game.counts)
                                 opt_score_result=score_result
                                 opt_move=iMove
                                 break
+                        #else continue regular minimax processing
                         if score_result > opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
@@ -422,10 +423,11 @@ class CustomPlayer:
                     else:
                         print("alphabeta: at target depth - minimizing player")
                         if score_result <= alpha:
-                                print("alphabeta: alpha pruning triggered, move_count=", game.counts)
+                                print("alphabeta: alpha pruning triggered, move_count +++ =", game.counts)
                                 opt_score_result=score_result
                                 opt_move=iMove
                                 break
+                        #else continue regular minimax processing
                         if score_result < opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
@@ -456,8 +458,8 @@ class CustomPlayer:
                         print("alphabeta: recursion return - maximizing player, game.move_count = ", game.counts)
                         print("alphabeta: recursion return - maximizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - maximizing player, score_result, alpha = ", score_result, alpha)
-                        if score_result > beta:
-                            print("alphabeta: recursion return - beta limit hit")
+                        if score_result >= beta:
+                            print("alphabeta: recursion return - beta limit hit ***")
                             opt_score_result = score_result
                             opt_move = iMove
                             break
@@ -466,7 +468,6 @@ class CustomPlayer:
                             print("alphabeta: recursion return, setting alpha = ", alpha)
                             opt_score_result = score_result
                             opt_move = iMove
-##                            break
                         elif score_result > opt_score_result:
                             opt_score_result = score_result
                             opt_move = iMove
@@ -476,11 +477,11 @@ class CustomPlayer:
                         print("alphabeta: recursion return - minimizing player, game.move_count = ", game.counts)
                         print("alphabeta: recursion return - minimizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - minimizing player, score_result, beta = ", score_result, beta)
-                        if score_result < alpha:
-                            print("alphabeta: recursion return - alpha limit hit")
+                        if score_result <= alpha:
+                            print("alphabeta: recursion return - alpha limit hit ***")
                             opt_score_result = score_result
                             opt_move = iMove
-                            break
+                            break                     
                         elif score_result < beta:
                             beta=score_result
                             print("alphabeta: recursion return, setting beta = ", beta)

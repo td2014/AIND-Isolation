@@ -453,7 +453,7 @@ class Project1Test(unittest.TestCase):
         counts = [(8, 8), (17, 10), (74, 42), (139, 51), (540, 119)]
 
 ###        for idx in range(len(counts)):
-        for idx in range(2,3):
+        for idx in range(4,5):
             test_depth = idx + 1  # pruning guarantee requires min depth of 3
             first_branch = []
             heuristic = makeBranchEval(first_branch)
