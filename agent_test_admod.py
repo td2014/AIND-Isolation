@@ -164,6 +164,7 @@ def makeBranchEval(first_branch):
     def score(game, player):
         if not first_branch:
             first_branch.append(game.root)
+            print("makeBranchEval: first_branch = ", first_branch)
         if game.root in first_branch:
             return 1.
         return 0.

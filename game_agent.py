@@ -402,10 +402,10 @@ class CustomPlayer:
                 for iMove in game_legal_moves:
                     print("alphabeta: at target depth ---start of iMove---")
                     print("alphabeta: game.move_count =", game.counts)
-                    _=game.forecast_move(iMove)
+                    gameTemp=game.forecast_move(iMove)
                     print("alphabeta: at target depth, checking iMove = ", iMove)
   ###                  print(gameTemp.print_board())
-                    score_result = self.score(game, self)
+                    score_result = self.score(gameTemp, self)
                     print("alphabeta: at target depth - score_result, move_count = ", score_result, game.counts)
                     if maximizing_player:
                         print("alphabeta: at target depth - maximizing player")
@@ -440,19 +440,21 @@ class CustomPlayer:
                 for iMove in game_legal_moves:
                     print("alphabeta: calling recursion, maximizing_player = ", maximizing_player)
                     print("alphabeta: calling recursion, legal_moves() = ", game_legal_moves)
-                    print("alphabeta: calling recursion, move_count before forecast = ", game.counts)
+                    print("alphabeta: calling recursion, game.move_count before forecast = ", game.counts)
                     # update game board with parent move before recursing.
-                    _=game.forecast_move(iMove)
+                    gameTemp = game.forecast_move(iMove)
                     print("alphabeta: calling recursion: maximizing_player, iMove = ", maximizing_player, iMove)
-                    print("alphabeta: calling recursion, move_count after forecast = ", game.counts)
+                    print("alphabeta: calling recursion, game.move_count after forecast = ", game.counts)
+                    print("alphabeta: calling recursion, gameTemp.move_count after forecast = ", gameTemp.counts)
                     print("alphabeta: calling recursion: alpha, beta = ", alpha, beta)
                     # recursive call:  decrease depth and invert maximize to toggle between min/max layers
-                    score_result, test_move = self.alphabeta(game, depth-1, alpha, beta, not maximizing_player)
+                    score_result, test_move = self.alphabeta(gameTemp, depth-1, alpha, beta, not maximizing_player)
                     print("alphabeta: recursion return - depth, score_result, iMove, test_move", depth, score_result, iMove, test_move)
                     print("alphabeta: recursion return - alpha, beta = ", alpha, beta)
                     # want to update max or min depending if current layer is maximizing or minimizing
                     if maximizing_player:
-                        print("alphabeta: recursion return - maximizing player, move_count = ", game.counts)
+                        print("alphabeta: recursion return - maximizing player, game.move_count = ", game.counts)
+                        print("alphabeta: recursion return - maximizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - maximizing player, score_result, alpha = ", score_result, alpha)
                         if score_result > alpha:
                             alpha=score_result
@@ -466,7 +468,8 @@ class CustomPlayer:
                         else:
                             continue
                     else:
-                        print("alphabeta: recursion return - minimizing player, move_count = ", game.counts)
+                        print("alphabeta: recursion return - minimizing player, game.move_count = ", game.counts)
+                        print("alphabeta: recursion return - minimizing player, gameTemp.move_count = ", gameTemp.counts)
                         print("alphabeta: recursion return - minimizing player, score_result, beta = ", score_result, beta)
                         if score_result < beta:
                             beta=score_result
