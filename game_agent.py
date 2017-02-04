@@ -41,7 +41,7 @@ def custom_score(game, player):
     
     # heuristic ideas:
         
-    # 1)  Distance of open squares from center: OSD
+    # 1)  Average reciprocal distance of open squares from center: OSD
     # 2)  Ratio of central open squares to central peripheral squares
     # 3)  Opponent position furthest from center of board.
 
