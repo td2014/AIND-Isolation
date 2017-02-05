@@ -67,7 +67,7 @@ def play_match(player1, player2):
     num_wins = {player1: 0, player2: 0}
     num_timeouts = {player1: 0, player2: 0}
     num_invalid_moves = {player1: 0, player2: 0}
-    games = [Board(player1, player2, width=9), Board(player2, player1, width=9)]
+    games = [Board(player1, player2), Board(player2, player1)]
 
     # initialize both games with a random move and response
     for _ in range(2):

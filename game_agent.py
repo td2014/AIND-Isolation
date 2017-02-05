@@ -7,7 +7,6 @@ You must test your agent's strength against a set of agents with known
 relative strength using tournament.py and include the results in your report.
 """
 import random
-###import sample_players as sp #for testing
 import math
 
 
