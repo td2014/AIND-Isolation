@@ -35,7 +35,7 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    score = 0.0
+    score = custom_score1(game, player)
     return score
 
 
@@ -93,7 +93,7 @@ def custom_score1(game, player):
     
 #    print(game.to_string())
 
-#    input("press key to continue.")
+    input("press key to continue.")
     
 
     return score
