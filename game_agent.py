@@ -35,7 +35,7 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    score = custom_score2(game, player)
+    score = custom_score3(game, player)
     return score
 
 
@@ -142,45 +142,26 @@ def custom_score2(game, player):
     
     openSquares = game.get_blank_spaces()
     
-##    print("opensquares = ", openSquares)
-##    print(game.to_string())
-    
-    # Compute average distance, with minimum bounded by 1.0
+    # Compute average distance of open squares
     
     rowCenter = game.height//2  # center row of board
     colCenter = game.width//2   # center column of board
-    
-##    print("rowCenter = ", rowCenter)
-##    print("colCenter = ", colCenter)
-    
+      
     sumDist = 0.0
     for iSquare in openSquares:
         distToCenter=(iSquare[0]-rowCenter)**2 + (iSquare[1]-colCenter)**2
         distToCenter=math.sqrt(distToCenter)
         sumDist = sumDist+distToCenter
-##        print("iSquare = ", iSquare)
-##        print("iSquare[0] = ", iSquare[0])
-##        print("iSquare[1] = ", iSquare[1])
-##        print("distToCenter = ", distToCenter)
-##        print("sumDist = ", sumDist)
-##        print()
         
     numSquares = len(openSquares)
     avgDist = sumDist/numSquares
-    
-##    print("numSquares = ", numSquares)
-##    print("avgDist = ", avgDist)
-    
+       
     # set lower limit to 1.0, to make inverse well-defined
     avgDist = max(1.0, avgDist)
     
     # Compute inverse and assign to score
-     
     score = 1.0/avgDist
-    
-##    print("score = ", score)
-
-##    input("InverseAvgOpenRadius: Press any key to continue.")                        
+                     
     return score
 
 
@@ -237,8 +218,85 @@ def custom_score3(game, player):
     # the ratio of central to peripheral is taken, and 
     # returned as the score.
     #
-          
-    score = 1.0
+    
+    #
+    # Determine Central Region Boundary
+    #
+    
+    print(game.to_string())
+        
+    rowCenter = game.height//2  # center row of board
+    colCenter = game.width//2   # center column of board
+    
+    rowExtent = (game.height - rowCenter)//2 # 50% of distance from center to edge
+    colExtent = (game.width - colCenter)//2 # 50% of distance from center to edge
+    
+    # Create mask for center region
+    
+    centerMask = set()
+    for iRow in range(rowCenter-rowExtent, rowCenter+rowExtent+1):
+        for iCol in range(colCenter-colExtent, colCenter+colExtent+1):
+            centerMask.add((iRow,iCol))
+            print("(iRow, iCol): ", (iRow, iCol))
+            
+    
+    print("rowCenter: ", rowCenter)
+    print("colCenter: ", colCenter)
+    print("rowExtent: ", rowExtent)
+    print("colExtent: ", colExtent)
+    print("height: ", game.height)
+    print("width: ", game.width)
+    print("centerMask: ", centerMask)
+                   
+    #
+    # Get list of all open squares
+    #
+    
+    openSquares = game.get_blank_spaces()
+    
+    print("openSquares = ", openSquares)
+    
+    #
+    # Split open squares into two groups:
+    # Central and Peripheral
+    #
+    centerRegion = []
+    peripheralRegion = []
+    
+    for iSquare in openSquares:
+        if iSquare in centerMask:
+            centerRegion.append(iSquare)
+        else:
+            peripheralRegion.append(iSquare)
+    
+    
+    print("centerRegion: ", centerRegion)
+    print("peripheralRegion: ", peripheralRegion)
+    
+    sizeCenter=len(centerRegion)
+    sizePeripheral=len(peripheralRegion)
+    
+    print("sizeCenter = ", sizeCenter)
+    print("sizePeripheral = ", sizePeripheral)
+    print("size openSquares = ", len(openSquares))
+    
+    #
+    # Set minimums to 1.0, to make sure the heuristic is
+    # well-defined in all cases.
+    #
+    
+    sizeCenter = max(1.0, sizeCenter)
+    sizePeripheral = max(1.0, sizePeripheral)
+    
+    #
+    # Compute Central to Peripheral Ratio and return score
+    #
+    
+    score = sizeCenter/sizePeripheral
+
+    print ("score = ", score)
+    
+    input("CenterToPeripheralOpenRatio: Press any key to continue.")
     return score
 
     
