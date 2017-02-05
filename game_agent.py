@@ -35,7 +35,8 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    score = custom_score3(game, player)
+    #PlayerCentralityRatio is winner, please see below for definition
+    score = custom_score1(game, player) 
     return score
 
 
@@ -549,7 +550,6 @@ class CustomPlayer:
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
 
-        
 #
 # Algorithm to implement alpha beta pruning.
 #
@@ -572,7 +572,7 @@ class CustomPlayer:
                 opt_score_result = float("inf")
                 opt_move = (-1,-1)  
                 
-        # we are at target depth
+        # we are at target depth if depth==1
         # now loop over legal moves and determine max or min scoring move
         # depending on layer type.        
             if depth == 1:
