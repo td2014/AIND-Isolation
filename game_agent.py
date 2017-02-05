@@ -142,34 +142,34 @@ def custom_score2(game, player):
     
     openSquares = game.get_blank_spaces()
     
-    print("opensquares = ", openSquares)
-    print(game.to_string())
+##    print("opensquares = ", openSquares)
+##    print(game.to_string())
     
     # Compute average distance, with minimum bounded by 1.0
     
     rowCenter = game.height//2  # center row of board
     colCenter = game.width//2   # center column of board
     
-    print("rowCenter = ", rowCenter)
-    print("colCenter = ", colCenter)
+##    print("rowCenter = ", rowCenter)
+##    print("colCenter = ", colCenter)
     
     sumDist = 0.0
     for iSquare in openSquares:
         distToCenter=(iSquare[0]-rowCenter)**2 + (iSquare[1]-colCenter)**2
         distToCenter=math.sqrt(distToCenter)
         sumDist = sumDist+distToCenter
-        print("iSquare = ", iSquare)
-        print("iSquare[0] = ", iSquare[0])
-        print("iSquare[1] = ", iSquare[1])
-        print("distToCenter = ", distToCenter)
-        print("sumDist = ", sumDist)
-        print()
+##        print("iSquare = ", iSquare)
+##        print("iSquare[0] = ", iSquare[0])
+##        print("iSquare[1] = ", iSquare[1])
+##        print("distToCenter = ", distToCenter)
+##        print("sumDist = ", sumDist)
+##        print()
         
     numSquares = len(openSquares)
     avgDist = sumDist/numSquares
     
-    print("numSquares = ", numSquares)
-    print("avgDist = ", avgDist)
+##    print("numSquares = ", numSquares)
+##    print("avgDist = ", avgDist)
     
     # set lower limit to 1.0, to make inverse well-defined
     avgDist = max(1.0, avgDist)
@@ -178,9 +178,9 @@ def custom_score2(game, player):
      
     score = 1.0/avgDist
     
-    print("score = ", score)
+##    print("score = ", score)
 
-    input("InverseAvgOpenRadius: Press any key to continue.")                        
+##    input("InverseAvgOpenRadius: Press any key to continue.")                        
     return score
 
 
@@ -208,7 +208,34 @@ def custom_score3(game, player):
     # CenterToPeripheralOpenRatio
     
     #
-    # Ratio of central open squares to central peripheral squares
+    # This heuristic computes the ratio of central open squares 
+    # to peripheral open squares, with the assumption that
+    # game positions that have more relative open squares in
+    # the center of the board relative to the outside of the 
+    # board are better.
+    #
+    # For the purposes of this heuristic, the board is divided into
+    # two regions.  The central region is the inner squares that
+    # run from the center square to 50% (approximately) of the
+    # distance to the board edge in each direction.
+    # The peripheral region is those remaining squares outside of
+    # the central region:
+    #  
+    # See below for illustration:
+    #   -------------------
+    #   |  Peripheral     |
+    #   |  Region         |
+    #   |    ---------    |
+    #   |    |Central|    |
+    #   |    |Region |    | 
+    #   |    ---------    |
+    #   |                 |
+    #   |                 | 
+    #   -------------------
+    #
+    # Once the squares are counted in each region,
+    # the ratio of central to peripheral is taken, and 
+    # returned as the score.
     #
           
     score = 1.0
