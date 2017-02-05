@@ -223,8 +223,6 @@ def custom_score3(game, player):
     # Determine Central Region Boundary
     #
     
-    print(game.to_string())
-        
     rowCenter = game.height//2  # center row of board
     colCenter = game.width//2   # center column of board
     
@@ -237,25 +235,13 @@ def custom_score3(game, player):
     for iRow in range(rowCenter-rowExtent, rowCenter+rowExtent+1):
         for iCol in range(colCenter-colExtent, colCenter+colExtent+1):
             centerMask.add((iRow,iCol))
-            print("(iRow, iCol): ", (iRow, iCol))
-            
-    
-    print("rowCenter: ", rowCenter)
-    print("colCenter: ", colCenter)
-    print("rowExtent: ", rowExtent)
-    print("colExtent: ", colExtent)
-    print("height: ", game.height)
-    print("width: ", game.width)
-    print("centerMask: ", centerMask)
-                   
+                                 
     #
     # Get list of all open squares
     #
     
     openSquares = game.get_blank_spaces()
-    
-    print("openSquares = ", openSquares)
-    
+     
     #
     # Split open squares into two groups:
     # Central and Peripheral
@@ -269,17 +255,9 @@ def custom_score3(game, player):
         else:
             peripheralRegion.append(iSquare)
     
-    
-    print("centerRegion: ", centerRegion)
-    print("peripheralRegion: ", peripheralRegion)
-    
     sizeCenter=len(centerRegion)
     sizePeripheral=len(peripheralRegion)
-    
-    print("sizeCenter = ", sizeCenter)
-    print("sizePeripheral = ", sizePeripheral)
-    print("size openSquares = ", len(openSquares))
-    
+        
     #
     # Set minimums to 1.0, to make sure the heuristic is
     # well-defined in all cases.
@@ -294,9 +272,6 @@ def custom_score3(game, player):
     
     score = sizeCenter/sizePeripheral
 
-    print ("score = ", score)
-    
-    input("CenterToPeripheralOpenRatio: Press any key to continue.")
     return score
 
     
