@@ -613,7 +613,7 @@ class Project1Test(unittest.TestCase):
 ##               method, test_depth, expected_moves[idx // 2], move))
 
     @timeout(10)
-    @unittest.skip("Skip alphabeta2 test.")  # Uncomment this line to skip test
+##    @unittest.skip("Skip alphabeta2 test.")  # Uncomment this line to skip test
     def test_alphabeta2(self):
         """ Test CustomPlayer.alphabeta
 
@@ -628,7 +628,8 @@ class Project1Test(unittest.TestCase):
         starting_location = (8, 7)
         adversary_location = (0, 0)  # top left corner
         iterative_search = False
-        method = "alphabeta"
+#        method = "alphabeta"
+        method = "minimax"
 
         # The agent under test starts at position (2, 3) on the board, which
         # gives eight (8) possible legal moves [(0, 2), (0, 4), (1, 1), (1, 5),
@@ -637,13 +638,13 @@ class Project1Test(unittest.TestCase):
         # only changes on odd depths because even depths end on when the
         # adversary has initiative.
         value_table = [[0] * w for _ in range(h)]
-        value_table[4][5] = 10  # 
-        value_table[4][7] = 7  # 
-        value_table[5][4] = 6  # 
-        value_table[5][8] = 5  # 
-        value_table[7][4] = 4  # 
-        value_table[7][8] = 3  # 
-        value_table[8][5] = 2  # 
+        value_table[4][5] = 1  # 
+        value_table[4][7] = 1  # 
+        value_table[5][4] = 1  # 
+        value_table[5][8] = 1  # 
+        value_table[7][4] = 1  # 
+        value_table[7][8] = 1  # 
+        value_table[8][5] = 1  # 
         value_table[5][6] = 9  # 
         value_table[7][6] = 4  # 
         value_table[6][3] = 5  # 
@@ -678,9 +679,12 @@ class Project1Test(unittest.TestCase):
             print("========")
             print("test_alphabeta2: test_depth = ", test_depth)
             print("test_alphabeta2: get_legal_moves = ", board.get_legal_moves())
-            score, move = agentUT.alphabeta(board, test_depth)
-            print("test_alphabeta2: returned score = ", score)
-            print("test_alphabeta2: returned move = ", move)
+#            score, move = agentUT.alphabeta(board, test_depth)
+#            print("test_alphabeta2: alphabeta returned score = ", score)
+#            print("test_alphabeta2: alphabeta returned move = ", move)
+            score, move = agentUT.minimax(board, test_depth)
+            print("test_alphabeta2: minimax returned score = ", score)
+            print("test_alphabeta2: minimax returned move = ", move)
             print("++++++++")
             print()
 
