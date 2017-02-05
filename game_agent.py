@@ -35,7 +35,7 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    score = custom_score1(game, player)
+    score = custom_score2(game, player)
     return score
 
 
@@ -59,43 +59,45 @@ def custom_score1(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    # Custom Heuristic  
+    # Custom Heuristic 1: 
     # PlayerCentralityRatio
     
     #
-    #
+    # This heuristic is based on the assumption that having
+    # a position closer to the center of the board is stragically
+    # favorable.  It computes the distance of the student player from
+    # the center, the distance of the opponent from the center,
+    # and takes the ratio of opponent to student.  Larger values
+    # are better, since it indicates that the opponent is further
+    # from the center than the student.
     #
 
+    # get student agent player board location
     myLocation = game.get_player_location(player)
-    oppLocation = game.get_player_location(game.get_opponent(player))
-    rowCenter = game.height//2
-    colCenter = game.width//2
-#    print("RowCenter, ColCenter = ", rowCenter, colCenter)
-#    print("myLocation[0] = ", myLocation[0])
-#    print("myLocation[1] = ", myLocation[1])
-#    print("oppLocation[0] = ", oppLocation[0])
-#    print("oppLocation[1] = ", oppLocation[1])
     
+    # get opponent player board location
+    oppLocation = game.get_player_location(game.get_opponent(player))
+    
+    # get center of game board
+    rowCenter = game.height//2  # center row of board
+    colCenter = game.width//2   # center column of board
+
+    # Compute euclidian distance of student agent player from center
     myDistToCenter=(myLocation[0]-rowCenter)**2 + (myLocation[1]-colCenter)**2
     myDistToCenter=math.sqrt(myDistToCenter) 
 
+    # Compute euclidian distance of opponent from center
     oppDistToCenter=(oppLocation[0]-rowCenter)**2 + (oppLocation[1]-colCenter)**2
     oppDistToCenter=math.sqrt(oppDistToCenter)        
            
-#    print("myDistToCenter = ", myDistToCenter)
-#    print("oppDistToCenter = ", oppDistToCenter)
-    
+    # Put lower bound of 1.0, so that the ratio is always defined
+    # (no division by zero), and non-zero positive.
     myDistToCenter = max(1.0, myDistToCenter)
     oppDistToCenter = max(1.0, oppDistToCenter)
     
+    # Compute ratio of opponent to student
     score = oppDistToCenter/myDistToCenter
-#    print("score = ", score)
     
-#    print(game.to_string())
-
-    input("press key to continue.")
-    
-
     return score
 
 
@@ -119,19 +121,66 @@ def custom_score2(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    # Custom Heuristic  
+    # Custom Heuristic 2:  
     # InverseAvgOpenRadius
     
     #
+    # This heuristic tries to favor moves that have more open squares
+    # closer to the center of the board, assuming that the center of
+    # the board is move favorable for winning.  It works by finding
+    # all the open squares, their distances from the center, and taking
+    # the average.  In order to make smaller averages be higher
+    # score values, the inverse is taken as the score.  So if the 
+    # average distance was 3 squares, the inverse would be 1/3=0.333 or
+    # if the average distance was 2 squares, the inverse would be 1/2=0.5
+    # which is assumed to be a better position to control the game play.
+    # The lower limit of the average is set to 1, to make sure
+    # the inverse is well-defined.
     #
-    #
+
+    # Get list of open squares using provided utility function
     
-    # 2)  Average reciprocal distance of open squares from center: OSD:
-    # 2a) Get list of open squares using utility function
-    # 2b) Compute average distance, with minimum bounded by 1.0
-    # 2c) Compute reciprocal and assign to score
-                      
-    score = 1.0       
+    openSquares = game.get_blank_spaces()
+    
+    print("opensquares = ", openSquares)
+    print(game.to_string())
+    
+    # Compute average distance, with minimum bounded by 1.0
+    
+    rowCenter = game.height//2  # center row of board
+    colCenter = game.width//2   # center column of board
+    
+    print("rowCenter = ", rowCenter)
+    print("colCenter = ", colCenter)
+    
+    sumDist = 0.0
+    for iSquare in openSquares:
+        distToCenter=(iSquare[0]-rowCenter)**2 + (iSquare[1]-colCenter)**2
+        distToCenter=math.sqrt(distToCenter)
+        sumDist = sumDist+distToCenter
+        print("iSquare = ", iSquare)
+        print("iSquare[0] = ", iSquare[0])
+        print("iSquare[1] = ", iSquare[1])
+        print("distToCenter = ", distToCenter)
+        print("sumDist = ", sumDist)
+        print()
+        
+    numSquares = len(openSquares)
+    avgDist = sumDist/numSquares
+    
+    print("numSquares = ", numSquares)
+    print("avgDist = ", avgDist)
+    
+    # set lower limit to 1.0, to make inverse well-defined
+    avgDist = max(1.0, avgDist)
+    
+    # Compute inverse and assign to score
+     
+    score = 1.0/avgDist
+    
+    print("score = ", score)
+
+    input("InverseAvgOpenRadius: Press any key to continue.")                        
     return score
 
 
